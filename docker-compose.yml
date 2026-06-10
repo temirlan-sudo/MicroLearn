@@ -1,0 +1,90 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: microlearn-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-microlearn}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-microlearn}
+      POSTGRES_DB: ${POSTGRES_DB:-microlearn}
+    # Postgres is only accessed from the backend container on the docker network.
+    # No host port exposed by default. Uncomment if you need direct DB access:
+    # ports:
+    #   - "5433:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-microlearn}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ./backend
+    container_name: microlearn-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - .env
+    ports:
+      - "7666:4000"
+    volumes:
+      - uploads:/app/uploads
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: microlearn-pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@example.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    ports:
+      - "8765:80"
+    depends_on:
+      - postgres
+
+  # Prometheus собирает метрики с /metrics бэкенда каждые 15 секунд.
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: microlearn-prometheus
+    restart: unless-stopped
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prom_data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.enable-lifecycle"
+    ports:
+      - "8997:9090"
+    depends_on:
+      - backend
+
+  # Grafana с автопровижинингом datasource (Prometheus) и дашборда MicroLearn.
+  grafana:
+    image: grafana/grafana:latest
+    container_name: microlearn-grafana
+    restart: unless-stopped
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-admin}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_AUTH_ANONYMOUS_ENABLED: "false"
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - grafana_data:/var/lib/grafana
+    ports:
+      - "9855:3000"
+    depends_on:
+      - prometheus
+
+volumes:
+  pg_data:
+  uploads:
+  prom_data:
+  grafana_data:

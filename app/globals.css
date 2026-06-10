@@ -1,0 +1,316 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * MicroLearn — Swiss-editorial палитра.
+ * Тёплые тонированные нейтрали + один сигнальный красный.
+ * Все цвета в OKLCH, хрома уменьшается у светлых и тёмных крайностей.
+ * Контраст muted-foreground намеренно высокий — текст читается, а не «дымит».
+ */
+:root {
+  /* Base surfaces */
+  --background: oklch(0.965 0.006 85); /* тёплый off-white, как газетная бумага */
+  --foreground: oklch(0.16 0.012 60); /* глубокий тёплый чёрный */
+
+  --surface: oklch(0.945 0.007 85); /* чуть темнее фона для зон */
+  --surface-2: oklch(0.905 0.009 85); /* второй уровень */
+
+  --card: oklch(0.965 0.006 85);
+  --card-foreground: oklch(0.16 0.012 60);
+
+  --popover: oklch(0.98 0.005 85);
+  --popover-foreground: oklch(0.16 0.012 60);
+
+  --primary: oklch(0.16 0.012 60);
+  --primary-foreground: oklch(0.965 0.006 85);
+
+  --secondary: oklch(0.925 0.007 85);
+  --secondary-foreground: oklch(0.2 0.012 60);
+
+  --muted: oklch(0.92 0.006 85);
+  /* более насыщенный чёрный для meta-текста, чтобы он не «пропадал».
+     0.30 даёт >=8:1 контраст на любом из наших светлых фонов. */
+  --muted-foreground: oklch(0.3 0.014 60);
+
+  /* Swiss signal red — единственный акцент. */
+  --accent: oklch(0.56 0.2 28);
+  --accent-foreground: oklch(0.98 0.005 85);
+
+  --destructive: oklch(0.56 0.2 28);
+  --destructive-foreground: oklch(0.98 0.005 85);
+
+  --border: oklch(0.78 0.008 70);
+  --rule: oklch(0.16 0.012 60); /* тонкая линия текста — контраст к фону */
+  --input: oklch(0.82 0.008 70);
+  --ring: oklch(0.56 0.2 28);
+
+  --chart-1: oklch(0.56 0.2 28);
+  --chart-2: oklch(0.32 0.02 60);
+  --chart-3: oklch(0.55 0.015 60);
+  --chart-4: oklch(0.75 0.012 60);
+  --chart-5: oklch(0.2 0.015 60);
+
+  --radius: 0; /* Swiss — без скруглений */
+
+  --sidebar: oklch(0.945 0.007 85);
+  --sidebar-foreground: oklch(0.16 0.012 60);
+  --sidebar-primary: oklch(0.16 0.012 60);
+  --sidebar-primary-foreground: oklch(0.965 0.006 85);
+  --sidebar-accent: oklch(0.56 0.2 28);
+  --sidebar-accent-foreground: oklch(0.98 0.005 85);
+  --sidebar-border: oklch(0.78 0.008 70);
+  --sidebar-ring: oklch(0.56 0.2 28);
+}
+
+.dark {
+  /* Тёмная тема — печатная чёрная, с тёплым оттенком */
+  --background: oklch(0.14 0.008 60);
+  --foreground: oklch(0.965 0.006 85);
+
+  --surface: oklch(0.18 0.01 60);
+  --surface-2: oklch(0.22 0.012 60);
+
+  --card: oklch(0.14 0.008 60);
+  --card-foreground: oklch(0.965 0.006 85);
+
+  --popover: oklch(0.18 0.01 60);
+  --popover-foreground: oklch(0.965 0.006 85);
+
+  --primary: oklch(0.965 0.006 85);
+  --primary-foreground: oklch(0.16 0.012 60);
+
+  --secondary: oklch(0.22 0.012 60);
+  --secondary-foreground: oklch(0.93 0.006 85);
+
+  --muted: oklch(0.22 0.012 60);
+  --muted-foreground: oklch(0.74 0.01 70);
+
+  --accent: oklch(0.68 0.2 28);
+  --accent-foreground: oklch(0.14 0.008 60);
+
+  --destructive: oklch(0.68 0.2 28);
+  --destructive-foreground: oklch(0.14 0.008 60);
+
+  --border: oklch(0.3 0.01 60);
+  --rule: oklch(0.965 0.006 85);
+  --input: oklch(0.3 0.01 60);
+  --ring: oklch(0.68 0.2 28);
+
+  --chart-1: oklch(0.68 0.2 28);
+  --chart-2: oklch(0.9 0.01 85);
+  --chart-3: oklch(0.6 0.012 70);
+  --chart-4: oklch(0.42 0.012 70);
+  --chart-5: oklch(0.3 0.012 60);
+
+  --sidebar: oklch(0.18 0.01 60);
+  --sidebar-foreground: oklch(0.965 0.006 85);
+  --sidebar-primary: oklch(0.965 0.006 85);
+  --sidebar-primary-foreground: oklch(0.14 0.008 60);
+  --sidebar-accent: oklch(0.68 0.2 28);
+  --sidebar-accent-foreground: oklch(0.14 0.008 60);
+  --sidebar-border: oklch(0.3 0.01 60);
+  --sidebar-ring: oklch(0.68 0.2 28);
+}
+
+@theme inline {
+  --font-display: var(--font-display), "Times New Roman", serif;
+  --font-sans: var(--font-sans), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: var(--font-mono), ui-monospace, "Cascadia Mono", "SF Mono", monospace;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  /* Alias: "panel" = приподнятая поверхность (карточки, хедеры таблиц, ховеры строк). */
+  --color-panel: var(--surface-2);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-rule: var(--rule);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings:
+      "ss01",
+      "ss02",
+      "cv11",
+      "tnum" off;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: "kern", "liga", "calt";
+  }
+
+  /* Selection — акцент вместо системного синего */
+  ::selection {
+    background: var(--accent);
+    color: var(--accent-foreground);
+  }
+
+  /* Вариативные оси дисплейного шрифта */
+  .font-display {
+    font-family: var(--font-display);
+    font-variation-settings:
+      "opsz" 48,
+      "wdth" 100;
+  }
+  .font-display-tight {
+    font-family: var(--font-display);
+    font-variation-settings:
+      "opsz" 96,
+      "wdth" 75;
+  }
+}
+
+@layer utilities {
+  /*
+   * Семантический алиас: в компонентах ml/ класс `text-muted` исторически
+   * используется в значении "приглушённый, но читаемый meta-текст".
+   * В Tailwind v4 `text-muted` по умолчанию резолвится в --color-muted
+   * (фоновая поверхность) и почти сливается с фоном. Префикс `html`
+   * поднимает специфичность до (0,1,1), гарантируя перебив Tailwind’овского
+   * утилитарного `.text-muted` (0,1,0). `bg-muted` не затрагивается —
+   * shadcn-компоненты (tabs, slider, table, kbd и т.д.) продолжают работать.
+   */
+  html .text-muted {
+    color: var(--muted-foreground);
+  }
+  html .hover\:text-muted:hover {
+    color: var(--muted-foreground);
+  }
+  html .placeholder\:text-muted::placeholder {
+    color: var(--muted-foreground);
+  }
+
+  /*
+   * Эйбраус-метки в Swiss-стиле: моноширинный, малый кегль,
+   * uppercase + широкий tracking, стабильно читаемый тёмный meta-color.
+   * Цвет запечён в сам класс, чтобы метки не зависели от каскада text-*.
+   */
+  .mono-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.2;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
+
+  /* Тонкая верхняя линия секции в швейцарской верстке */
+  .section-rule {
+    border-top: 1px solid var(--rule);
+  }
+  /* Цифровые таблицы */
+  .tnum {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
+  /* Вертикальный текст для пометок на полях */
+  .vertical-rl {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+  }
+  /* Пунктирная перфорация — для колофонов и отрывных карточек */
+  .rule-dashed {
+    background-image: linear-gradient(to right, currentColor 50%, transparent 50%);
+    background-size: 8px 1px;
+    background-repeat: repeat-x;
+  }
+}
+
+/* Анимация мерцания каретки */
+@keyframes caret-blink {
+  0%,
+  60% {
+    opacity: 1;
+  }
+  61%,
+  100% {
+    opacity: 0;
+  }
+}
+.caret {
+  display: inline-block;
+  width: 0.55em;
+  height: 0.95em;
+  vertical-align: -0.1em;
+  background: var(--accent);
+  animation: caret-blink 1.05s steps(2, end) infinite;
+  margin-left: 0.08em;
+}
+
+/* Лёгкое появление секций при входе в viewport (без bounce) */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+.rise-in {
+  animation: rise-in 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Бегущая строка */
+@keyframes marquee-x {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+.marquee-track {
+  animation: marquee-x 45s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track,
+  .caret,
+  .rise-in {
+    animation: none !important;
+  }
+}
