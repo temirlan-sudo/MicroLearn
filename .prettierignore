@@ -1,0 +1,11 @@
+node_modules
+.next
+dist
+backend/node_modules
+backend/dist
+package-lock.json
+pnpm-lock.yaml
+backend/package-lock.json
+skills
+.windsurf
+next-env.d.ts

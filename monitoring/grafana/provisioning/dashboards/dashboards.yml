@@ -1,0 +1,13 @@
+apiVersion: 1
+
+# Провижининг дашбордов — Grafana автоматически подхватит все JSON-файлы из указанной папки.
+providers:
+  - name: "MicroLearn"
+    orgId: 1
+    folder: "MicroLearn"
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 30
+    allowUiUpdates: true
+    options:
+      path: /etc/grafana/provisioning/dashboards

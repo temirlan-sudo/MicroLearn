@@ -1,0 +1,16 @@
+# Prometheus конфиг для MicroLearn.
+# Собираем метрики самого Prometheus и backend-сервиса.
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: prometheus
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  - job_name: microlearn-backend
+    metrics_path: /metrics
+    # В docker-сети бэкенд доступен по имени сервиса на внутреннем порту 4000.
+    static_configs:
+      - targets: ["backend:4000"]
